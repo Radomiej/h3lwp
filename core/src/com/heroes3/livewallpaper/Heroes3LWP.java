@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.io.File;
@@ -26,12 +27,15 @@ public class Heroes3LWP extends ApplicationAdapter {
     private long rectChangeTime = 0;
     private String currentMap;
 
+    private Vector3 cameraMiddle;
+
     @Override
     public void create() {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.5f;
         camera.setToOrtho(true);
         camera.update();
+        cameraMiddle = camera.position.cpy();
 
         batch = new SpriteBatch();
 
@@ -50,6 +54,11 @@ public class Heroes3LWP extends ApplicationAdapter {
         });
 
         Gdx.graphics.setContinuousRendering(true);
+    }
+
+    public void setPixelOffset(int pixelOffsetX, int pixelOffsetY) {
+        camera.position.x = cameraMiddle.x + pixelOffsetX / 100f;
+        mapRender.updateTerrainCacheView();
     }
 
     private Map readMap(String filename) {
