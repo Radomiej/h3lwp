@@ -4,6 +4,7 @@ import MapReader.Map;
 import MapReader.MapObject;
 import MapReader.Tile;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,13 +21,12 @@ import java.util.List;
 public class MapRender {
     public AssetManager assets = new AssetManager();
     private final static int TILE_SIZE = 32;
-    private SpriteCache terrainCache;
+    private TerrainRenderCache terrainCache;
     private TextureAtlas terrains;
     private TextureAtlas mapObjectsAtlas;
     private Rectangle rect;
     private Map map;
     private List<MapSprite> visibleObjects = new ArrayList<MapSprite>();
-    private int cacheId = 0;
     private OrthographicCamera camera;
 
     MapRender(OrthographicCamera camera) {
@@ -38,6 +38,8 @@ public class MapRender {
         mapObjectsAtlas = assets.get(getAssetName("mapObjects"));
 
         Texture.setAssetManager(assets);
+        terrainCache = new TerrainRenderCache();
+
     }
 
     public void setMap(Map map) {
@@ -114,7 +116,7 @@ public class MapRender {
 
 
     private void refreshTerrainCache() {
-        terrainCache = new SpriteCache((int) (rect.height * rect.width * 2), true);
+        terrainCache.clear((int) (rect.height * rect.width * 2));
 
         updateTerrainCacheView();
 
@@ -127,23 +129,20 @@ public class MapRender {
 
             if (isFitInRect(x, y)) {
                 drawTerrainTileToCache(
-                        terrainCache,
                         map.tiles.get(i),
                         (x - ((int) rect.x)) * TILE_SIZE,
                         (y - ((int) rect.y)) * TILE_SIZE
                 );
             }
         }
-
-        cacheId = terrainCache.endCache();
+        terrainCache.endCache();
     }
 
     public void updateTerrainCacheView() {
-        terrainCache.setTransformMatrix(camera.view);
-        terrainCache.setProjectionMatrix(camera.projection);
+        terrainCache.update(camera);
     }
 
-    private void drawTerrainTileToCache(SpriteCache sc, Tile tile, int x, int y) {
+    private void drawTerrainTileToCache(Tile tile, int x, int y) {
         TextureRegion terrain = new TextureRegion(
                 terrains.findRegion(
                         tile.toFilename(
@@ -153,18 +152,18 @@ public class MapRender {
                 )
         );
         terrain.flip(tile.flipConf.get(0), tile.flipConf.get(1));
-        sc.add(terrain, x, y);
+        terrainCache.add(terrain, x, y);
 
         if (tile.river != Tile.RiverType.No) {
             TextureRegion river = new TextureRegion(terrains.findRegion(tile.toFilename(Tile.TilePart.River), tile.riverImageIndex));
             river.flip(tile.flipConf.get(2), tile.flipConf.get(3));
-            sc.add(river, x, y);
+            terrainCache.add(river, x, y);
         }
 
         if (tile.road != Tile.RoadType.No) {
             TextureRegion road = new TextureRegion(terrains.findRegion(tile.toFilename(Tile.TilePart.Road), tile.roadImageIndex));
             road.flip(tile.flipConf.get(4), tile.flipConf.get(5));
-            sc.add(road, x, y);
+            terrainCache.add(road, x, y);
         }
     }
 
@@ -186,8 +185,6 @@ public class MapRender {
     }
 
     public void drawCache() {
-        terrainCache.begin();
-        terrainCache.draw(cacheId);
-        terrainCache.end();
+        terrainCache.draw();
     }
 }
