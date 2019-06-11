@@ -135,19 +135,6 @@ public class MapRender {
                 );
             }
         }
-        for (int i = 0; i < size; i++) {
-            int x = i % map.size;
-            int y = MathUtils.ceil(i / map.size);
-
-            if (isFitInRect(x, y)) {
-                drawRoadsAndRiversTileToCache(
-                        map.tiles.get(i),
-                        (x - ((int) rect.x)) * TILE_SIZE,
-                        (y - ((int) rect.y)) * TILE_SIZE
-                );
-            }
-        }
-
         terrainCache.endCache();
     }
 
@@ -166,9 +153,7 @@ public class MapRender {
         );
         terrain.flip(tile.flipConf.get(0), tile.flipConf.get(1));
         terrainCache.add(terrain, x, y);
-    }
 
-    private void drawRoadsAndRiversTileToCache(Tile tile, int x, int y) {
         if (tile.river != Tile.RiverType.No) {
             TextureRegion river = new TextureRegion(terrains.findRegion(tile.toFilename(Tile.TilePart.River), tile.riverImageIndex));
             river.flip(tile.flipConf.get(2), tile.flipConf.get(3));
