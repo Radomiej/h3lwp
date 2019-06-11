@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.heroes3.livewallpaper.utils.AnimationTimeManager;
 
 import java.util.Random;
 
@@ -29,7 +30,7 @@ class MapSprite {
     }
 
     void render(SpriteBatch batch, int x, int y) {
-        if (isAnimated) {
+        if (isAnimated && AnimationTimeManager.INSTANCE.shouldAnimationBeChanged()) {
             if (spritesList.size - 1 > currentFrameIndex) {
                 currentFrameIndex++;
             } else {

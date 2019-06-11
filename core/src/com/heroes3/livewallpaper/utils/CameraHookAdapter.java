@@ -35,12 +35,12 @@ public class CameraHookAdapter {
         else isOnPlace = false;
 
         int directionIndicator = totalDistanceStep >= 0 ? -1 : 1;
-        float maxDistanceStep = AppSettings.CAMERA_SMOOTH_SPEED * Math.min(Gdx.graphics.getDeltaTime(), 0.4f);
+        float maxDistanceStep = AppSettings.CAMERA_SMOOTH_SPEED * Math.min(Gdx.graphics.getDeltaTime(), 0.08f);
 
         float distanceStep = Math.min(maxDistanceStep, totalDistanceAbs) * directionIndicator;
         camera.position.x += distanceStep;
 
-        Gdx.app.log(getClass().getSimpleName(), "camera posX: " + camera.position.x + " distance step: " + distanceStep);
+        Gdx.app.log(getClass().getSimpleName(), "camera posX: " + camera.position.x + " distance step: " + distanceStep + " delta: " + Gdx.graphics.getDeltaTime());
 
 
     }

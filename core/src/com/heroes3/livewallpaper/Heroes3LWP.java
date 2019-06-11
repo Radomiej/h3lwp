@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.heroes3.livewallpaper.utils.AnimationTimeManager;
 import com.heroes3.livewallpaper.utils.CameraHookAdapter;
 
 import java.io.File;
@@ -54,13 +55,6 @@ public class Heroes3LWP extends ApplicationAdapter {
 
     private void setupAndroidWallpaper() {
         Gdx.graphics.setContinuousRendering(false);
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                Gdx.graphics.requestRendering();
-//            }
-//        }, AppSettings.UPDATE_DELAY, AppSettings.UPDATE_DELAY);
     }
 
     private void setupDesktop() {
@@ -97,6 +91,7 @@ public class Heroes3LWP extends ApplicationAdapter {
     public void render() {
         mapRender.assets.finishLoading();
         cameraHookAdapter.update();
+        AnimationTimeManager.INSTANCE.update();
 
         manuallyDelayRenderIfNeed();
 
@@ -121,7 +116,6 @@ public class Heroes3LWP extends ApplicationAdapter {
 
     private void manuallyDelayRenderIfNeed() {
         if (cameraHookAdapter.needRedraw()) return;
-//        if (Gdx.app.getType() != Application.ApplicationType.Desktop) return;
 
         int chunkUpdatePeriod = AppSettings.UPDATE_DELAY / AppSettings.UPDATE_CHECK_CHUNK;
 
@@ -155,7 +149,7 @@ public class Heroes3LWP extends ApplicationAdapter {
                 mapRender.setMap(readMap("maps/" + currentMap));
             }
 
-            int width = Math.round(Gdx.graphics.getWidth() * 4 * camera.zoom);
+            int width = Math.round(Gdx.graphics.getWidth() * 3 * camera.zoom);
             int height = Math.round(Gdx.graphics.getHeight() * camera.zoom);
             mapRender.setRandomRect(width, height);
         }
