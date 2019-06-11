@@ -25,7 +25,7 @@ public class LiveWallpaper extends AndroidLiveWallpaperService {
 
         @Override
         public void offsetChange(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset, int yPixelOffset) {
-            Gdx.app.log("LiveWallpaper", "offset changed: " + xPixelOffset + ", " + yPixelOffset + " step: " + xOffsetStep + " normal: " + xOffset);
+//            Gdx.app.log("LiveWallpaper", "offset changed: " + xPixelOffset + ", " + yPixelOffset + " step: " + xOffsetStep + " normal: " + xOffset);
             setPixelOffset(xOffset, xOffsetStep, xPixelOffset);
         }
 

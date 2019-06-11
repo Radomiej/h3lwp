@@ -39,10 +39,6 @@ public class CameraHookAdapter {
 
         float distanceStep = Math.min(maxDistanceStep, totalDistanceAbs) * directionIndicator;
         camera.position.x += distanceStep;
-
-        Gdx.app.log(getClass().getSimpleName(), "camera posX: " + camera.position.x + " distance step: " + distanceStep + " delta: " + Gdx.graphics.getDeltaTime());
-
-
     }
 
     public boolean needRedraw() {
