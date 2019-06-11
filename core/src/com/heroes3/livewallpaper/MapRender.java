@@ -112,11 +112,11 @@ public class MapRender {
         }
     }
 
+
     private void refreshTerrainCache() {
         terrainCache = new SpriteCache((int) (rect.height * rect.width * 2), true);
 
-        terrainCache.setTransformMatrix(camera.view);
-        terrainCache.setProjectionMatrix(camera.projection);
+        updateTerrainCacheView();
 
         terrainCache.beginCache();
 
@@ -136,6 +136,11 @@ public class MapRender {
         }
 
         cacheId = terrainCache.endCache();
+    }
+
+    public void updateTerrainCacheView() {
+        terrainCache.setTransformMatrix(camera.view);
+        terrainCache.setProjectionMatrix(camera.projection);
     }
 
     private void drawTerrainTileToCache(SpriteCache sc, Tile tile, int x, int y) {
